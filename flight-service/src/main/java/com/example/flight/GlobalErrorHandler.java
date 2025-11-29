@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @ControllerAdvice
@@ -37,5 +39,11 @@ public class GlobalErrorHandler {
     public ResponseEntity<String> handleServiceValidationExceptions(IllegalArgumentException ex) {
         // 400 Bad Request
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+	
+	@ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
+        // Return a reason for the exception
+        return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
     }
 }

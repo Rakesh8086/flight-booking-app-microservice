@@ -1,6 +1,8 @@
 package com.example.flight.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,14 @@ public class FlightServiceImpl implements FlightService {
         
         return flight.getId();
     }
-
+    
+    @Override
+    public List<Flight> searchFlights(String fromPlace, String toPlace, LocalDate scheduleDate) {
+        return flightRepository.findByFromPlaceAndToPlaceAndScheduleDateAndAvailableSeatsGreaterThan(
+                fromPlace, 
+                toPlace, 
+                scheduleDate, 
+                0 // show flights with 1 or more available seats
+        );
+    }
 }
