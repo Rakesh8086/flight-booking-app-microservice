@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.example.booking.exception.BookingNotFoundException;
+import com.example.booking.exception.CancellationNotPossibleException;
 import com.example.booking.exception.FlightUnavailableException;
 
 @ControllerAdvice
@@ -44,5 +45,10 @@ public class GlobalErrorHandler {
     @ExceptionHandler(BookingNotFoundException.class)
     public ResponseEntity<String> handleBookingNotFoundException(BookingNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    
+    @ExceptionHandler(CancellationNotPossibleException.class)
+    public ResponseEntity<String> handleCancellationNotPossibleException(CancellationNotPossibleException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
