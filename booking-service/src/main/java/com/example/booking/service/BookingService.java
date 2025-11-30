@@ -126,4 +126,13 @@ public class BookingService {
         return bookingOptional.get();
     }
     
+	public List<Booking> getBookingHistoryByEmail(String emailId) {
+        List<Booking> history = bookingRepository.findByUserEmailOrderByBookingDateDesc(emailId);
+        if(history.isEmpty()) {
+            throw new BookingNotFoundException(
+            		"No booking history found for email: " + emailId);
+        }
+        
+        return history;
+    }
 }
