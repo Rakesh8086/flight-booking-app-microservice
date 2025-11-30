@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.flight.dto.FlightDTO;
 import com.example.flight.entity.Flight;
+import com.example.flight.exception.FlightNotFoundException;
 import com.example.flight.repository.FlightRepository;
 import com.example.flight.service.FlightService;
 
@@ -52,32 +53,57 @@ public class FlightServiceImpl implements FlightService {
     }
     
     @Override
-    public Optional<Flight> getFlightById(Long flightId) {
-        return flightRepository.findById(flightId);
+    public Optional<FlightDTO> getFlightById(Long flightId) {
+    	return flightRepository.findById(flightId)
+    	        .map(this::FlightEntityToDto);
     }
     
     @Override
     public String updateFlightInventory(FlightDTO flightDto) {
-    	Flight flight = FlightDtoToEntity(flightDto);
-    	
-        flightRepository.save(flight);
+        if(flightDto.getId() == null) {
+            throw new IllegalArgumentException("Flight ID is required for inventory update.");
+        }
+        Flight existingFlight = flightRepository.findById(flightDto.getId())
+            .orElseThrow(() -> new FlightNotFoundException(
+            		"Flight not found with ID: " + flightDto.getId()));
+        existingFlight.setAvailableSeats(flightDto.getAvailableSeats());
+        flightRepository.save(existingFlight);
         
-        return "Inventory of Flight with Id " + flight.getId() + "been updated.";
+        return "Inventory of Flight with Id " + existingFlight.getId() + " has been updated.";
     }
     
     private Flight FlightDtoToEntity(FlightDTO flightDto) {
     	Flight flight = new Flight();
     	
-    	flight.setAirlineName(flightDto.getAirlineName());
-    	flight.setArrivalTime(flightDto.getArrivalTime());
-    	flight.setAvailableSeats(flightDto.getTotalSeats());
-    	flight.setDepartureTime(flightDto.getDepartureTime());
-    	flight.setPrice(flightDto.getPrice());
-    	flight.setScheduleDate(flightDto.getScheduleDate());
-    	flight.setFromPlace(flightDto.getFromPlace());
-    	flight.setToPlace(flightDto.getToPlace());
-    	flight.setTotalSeats(flightDto.getTotalSeats());
+    	flight.setId(flightDto.getId()); 
+        
+        flight.setAirlineName(flightDto.getAirlineName());
+        flight.setArrivalTime(flightDto.getArrivalTime());
+        flight.setAvailableSeats(flightDto.getTotalSeats()); 
+        flight.setDepartureTime(flightDto.getDepartureTime());
+        flight.setPrice(flightDto.getPrice());
+        flight.setScheduleDate(flightDto.getScheduleDate());
+        flight.setFromPlace(flightDto.getFromPlace());
+        flight.setToPlace(flightDto.getToPlace());
+        flight.setTotalSeats(flightDto.getTotalSeats());
     	
     	return flight;
+    }
+    
+    private FlightDTO FlightEntityToDto(Flight flight) {
+    	FlightDTO flightDto = new FlightDTO();
+    	
+    	flightDto.setId(flight.getId());
+    	flightDto.setAirlineName(flight.getAirlineName());
+    	flightDto.setArrivalTime(flight.getArrivalTime());
+    	flightDto.setDepartureTime(flight.getDepartureTime());
+    	flightDto.setPrice(flight.getPrice());
+    	flightDto.setScheduleDate(flight.getScheduleDate());
+    	flightDto.setFromPlace(flight.getFromPlace());
+    	flightDto.setToPlace(flight.getToPlace());
+    	flightDto.setTotalSeats(flight.getTotalSeats());
+    	flightDto.setAvailableSeats(flight.getAvailableSeats());
+    	
+    	return flightDto;
     }
 }

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.example.flight.exception.FlightNotFoundException;
+
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @ControllerAdvice
@@ -45,5 +48,11 @@ public class GlobalErrorHandler {
     public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
         // Return a reason for the exception
         return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
+    }
+	
+	@ExceptionHandler(FlightNotFoundException.class)
+    public ResponseEntity<String> handleFlightNotFoundException(FlightNotFoundException ex) {
+        
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -16,8 +16,9 @@ public interface FlightService {
     List<Flight> searchFlights(String fromPlace, String toPlace, LocalDate scheduleDate);
 
     // get flight by its ID
-    Optional<Flight> getFlightById(Long flightId);
+    Optional<FlightDTO> getFlightById(Long flightId);
     
     // to update flight seats after booking tickets
     String updateFlightInventory(FlightDTO flightDto);
+    
 }

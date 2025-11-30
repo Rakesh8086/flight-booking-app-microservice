@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FlightDTO {
+	private Long id;
 	@NotBlank
     private String airlineName;
 	@NotBlank
@@ -32,4 +33,7 @@ public class FlightDTO {
     private Double price;
 	@Min(value = 1, message = "Total seats must be at least 1.")
     private Integer totalSeats;
+	
+	@Min(value = 0, message = "Available seats cannot be negative.")
+    private Integer availableSeats;
 }
