@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.booking.exception.BookingNotFoundException;
 import com.example.booking.exception.FlightUnavailableException;
 
 @ControllerAdvice
@@ -38,5 +39,10 @@ public class GlobalErrorHandler {
     @ExceptionHandler(FlightUnavailableException.class)
     public ResponseEntity<String> handleFlightUnavailableException(FlightUnavailableException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<String> handleBookingNotFoundException(BookingNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

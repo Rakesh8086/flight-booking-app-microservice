@@ -12,9 +12,11 @@ import com.example.booking.dto.FlightDTO;
 import com.example.booking.dto.PassengerDTO;
 import com.example.booking.entity.Booking;
 import com.example.booking.entity.Passenger;
+import com.example.booking.exception.BookingNotFoundException;
 import com.example.booking.exception.FlightUnavailableException;
 import com.example.booking.feign.BookingInterface;
 import com.example.booking.repository.BookingRepository;
+import com.google.common.base.Optional;
 
 import feign.FeignException;
 
@@ -112,6 +114,16 @@ public class BookingService {
 	
 	private String generateUniquePNR() {
         return "CHUBBFLIGHT" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+    }
+	
+	public Booking getTicketByPnr(String pnr) {
+        Optional<Booking> bookingOptional = bookingRepository.findByPnr(pnr);
+        if(!bookingOptional.isPresent()) {
+        	throw new BookingNotFoundException(
+        			"Number of seats must be at least one.");
+        }
+        
+        return bookingOptional.get();
     }
     
 }
