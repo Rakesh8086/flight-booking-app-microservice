@@ -31,10 +31,9 @@ public class BookingController {
             @PathVariable Long flightId, 
             @Valid @RequestBody BookingRequest request) {
                
-        String bookedTicketPnr = bookingService.bookTicket(flightId, request);
-        
-        return new ResponseEntity<>(bookedTicketPnr, HttpStatus.CREATED);
-    }
+        return bookingService.bookTicket(flightId, request);
+ 
+	}
 	
 	@GetMapping("/ticket/{pnr}")
     public ResponseEntity<Booking> getTicketByPnr(@PathVariable String pnr) {
