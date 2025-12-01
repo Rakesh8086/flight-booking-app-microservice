@@ -57,13 +57,13 @@ public class FlightController {
         }
         
         List<FlightDTO> flightDtos = matchingFlights.stream()
-                .map(this::FlightEntityToDto)
+                .map(this::flightEntityToDto)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(flightDtos, HttpStatus.OK);
     }
     
-    private FlightDTO FlightEntityToDto(Flight flight) {
+    private FlightDTO flightEntityToDto(Flight flight) {
     	FlightDTO flightDto = new FlightDTO();
     	
     	flightDto.setId(flight.getId());

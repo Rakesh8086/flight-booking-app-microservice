@@ -35,7 +35,7 @@ public class FlightServiceImpl implements FlightService {
         	throw new IllegalArgumentException("Arrival time must be after the departure time.");
         }
         
-    	Flight flight = FlightDtoToEntity(flightDto);
+    	Flight flight = flightDtoToEntity(flightDto);
     	
         flightRepository.save(flight);
         
@@ -55,7 +55,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public Optional<FlightDTO> getFlightById(Long flightId) {
     	return flightRepository.findById(flightId)
-    	        .map(this::FlightEntityToDto);
+    	        .map(this::flightEntityToDto);
     }
     
     @Override
@@ -72,7 +72,7 @@ public class FlightServiceImpl implements FlightService {
         return "Inventory of Flight with Id " + existingFlight.getId() + " has been updated.";
     }
     
-    private Flight FlightDtoToEntity(FlightDTO flightDto) {
+    private Flight flightDtoToEntity(FlightDTO flightDto) {
     	Flight flight = new Flight();
     	
     	flight.setId(flightDto.getId()); 
@@ -90,7 +90,7 @@ public class FlightServiceImpl implements FlightService {
     	return flight;
     }
     
-    private FlightDTO FlightEntityToDto(Flight flight) {
+    private FlightDTO flightEntityToDto(Flight flight) {
     	FlightDTO flightDto = new FlightDTO();
     	
     	flightDto.setId(flight.getId());
