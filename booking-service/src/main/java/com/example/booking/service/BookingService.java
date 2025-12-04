@@ -20,7 +20,7 @@ import com.example.booking.exception.CancellationNotPossibleException;
 import com.example.booking.exception.FlightUnavailableException;
 import com.example.booking.feign.BookingInterface;
 import com.example.booking.repository.BookingRepository;
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
